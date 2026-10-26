@@ -4,6 +4,7 @@ import Link from "next/link"
 import { ArchiveNav } from "@/components/archive-nav"
 import { PageHeader } from "@/components/page-header"
 import { StoryGrid } from "@/components/story-grid"
+import { SubmitBand } from "@/components/submit-band"
 import { GROUPS, groupById, typesInGroup } from "@/lib/forms"
 import { listPublished } from "@/lib/posts"
 
@@ -99,6 +100,7 @@ export default async function ArchivePage({
         </p>
         <StoryGrid posts={posts} empty="No matches. Try a different word, place or decade." />
       </div>
+      <SubmitBand />
     </>
   )
 }

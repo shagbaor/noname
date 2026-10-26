@@ -119,8 +119,33 @@ export async function countByTheme(): Promise<Record<string, number>> {
 
 // ---- Admin ----
 
-export async function listAll(): Promise<Post[]> {
-  return query<Post>(`SELECT ${COLUMNS} FROM posts ORDER BY updated_at DESC`)
+export async function listAll(filter: { q?: string; form?: string; status?: string } = {}): Promise<Post[]> {
+  const where: string[] = []
+  const params: unknown[] = []
+  if (filter.q) {
+    params.push(`%${filter.q}%`)
+    const p = `$${params.length}`
+    where.push(`(title ILIKE ${p} OR slug ILIKE ${p} OR author ILIKE ${p} OR excerpt ILIKE ${p} OR body ILIKE ${p} OR location ILIKE ${p})`)
+  }
+  if (filter.form) {
+    params.push(filter.form)
+    where.push(`form = $${params.length}`)
+  }
+  if (filter.status) {
+    params.push(filter.status)
+    where.push(`status = $${params.length}`)
+  }
+  return query<Post>(
+    `SELECT ${COLUMNS} FROM posts ${where.length ? `WHERE ${where.join(" AND ")}` : ""} ORDER BY updated_at DESC`,
+    params,
+  )
+}
+
+export async function countAll(): Promise<{ total: number; published: number }> {
+  const rows = await query<{ total: number; published: number }>(
+    `SELECT count(*)::int AS total, count(*) FILTER (WHERE status = 'published')::int AS published FROM posts`,
+  )
+  return rows[0]
 }
 
 export async function getById(id: number): Promise<Post | null> {

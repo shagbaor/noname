@@ -30,8 +30,8 @@ pnpm dev                                 # http://localhost:3000
 | `/stories/written`, `/stories/essays`, `/stories/testimonies`… | A group or a single type |
 | `/stories/<type>/<slug>` | A story, laid out to suit its type (poem, letter, transcript, film, gallery…) |
 | `/archive`, `/archive/timeline` | Search and timeline |
-| `/about`, `/donate` | What we are about; donations |
-| `/admin` | Editor: sign in, then create, edit, publish and delete posts; change password at `/admin/account` |
+| `/about`, `/donate`, `/submit` | What we are about; donations; submission guidelines (submissions by email to the address in `lib/site.ts`) |
+| `/admin` | Editor: search/filter, create, edit, publish and delete posts; `/admin/subscribers` to search, export (CSV) and remove mailing-list sign-ups; change password at `/admin/account` |
 
 ## Writing posts
 

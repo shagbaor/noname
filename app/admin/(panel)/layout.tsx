@@ -18,6 +18,7 @@ export default async function PanelLayout({ children }: { children: React.ReactN
           <nav className="flex flex-1 items-center gap-5 text-label-lg uppercase text-on-surface-variant">
             <Link href="/admin" className="hover:text-on-surface">Posts</Link>
             <Link href="/admin/posts/new" className="hover:text-on-surface">New</Link>
+            <Link href="/admin/subscribers" className="hover:text-on-surface">Subscribers</Link>
             <Link href="/admin/account" className="hidden hover:text-on-surface sm:inline">Account</Link>
           </nav>
           <Link href="/" className="hidden text-label-md uppercase text-outline hover:text-on-surface md:inline">

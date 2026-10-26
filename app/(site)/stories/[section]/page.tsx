@@ -4,6 +4,7 @@ import { PageHeader } from "@/components/page-header"
 import { Reveal } from "@/components/reveal"
 import { StoryGrid } from "@/components/story-grid"
 import { StoryNav, ThemeChips } from "@/components/story-nav"
+import { SubmitBand } from "@/components/submit-band"
 import { TestimonyRow } from "@/components/testimony-row"
 import { groupById, isThemeId, storyHref, typeBySection, typesInGroup, USES_AUDIO } from "@/lib/forms"
 import { countByForm, countByTheme, getPublishedBySlug, listPublished } from "@/lib/posts"
@@ -80,6 +81,7 @@ export default async function SectionPage({ params, searchParams }: Props) {
           <StoryGrid posts={posts} empty="Nothing published here yet. New stories are added regularly." />
         )}
       </div>
+      <SubmitBand type={r.type?.label} />
     </>
   )
 }

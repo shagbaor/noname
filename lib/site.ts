@@ -12,6 +12,27 @@ export const site = {
   // Payment link from your donation provider (Paystack, Flutterwave, Stripe…).
   // Leave empty until one is set up; the Donate page will say so.
   donateUrl: process.env.NEXT_PUBLIC_DONATE_URL ?? "",
+  // Where story submissions go
+  submissionsEmail: "sirjustin78@gmail.com",
+}
+
+/** mailto: link for submissions, optionally pre-filling the subject with a story type. */
+export function submitMailto(type?: string) {
+  const subject = type ? `Story submission: ${type}` : "Story submission"
+  const body = [
+    "Hello,",
+    "",
+    "I'd like to submit a story to the archive.",
+    "",
+    "Title:",
+    "Type (essay, testimony, poem, photo, letter…):",
+    "Place and time it's about:",
+    "How I'd like to be credited (name, initials, or anonymous):",
+    "",
+    "The story / links to files:",
+    "",
+  ].join("\n")
+  return `mailto:${site.submissionsEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
 }
 
 export const nav: NavItem[] = [
@@ -39,4 +60,5 @@ export const nav: NavItem[] = [
     ],
   },
   { label: "About", href: "/about" },
+  { label: "Submit", href: "/submit" },
 ]

@@ -5,7 +5,7 @@ import { Reveal } from "@/components/reveal"
 import { TextileArt } from "@/components/textile"
 import { Button } from "@/components/ui/button"
 import { GROUPS, typesInGroup } from "@/lib/forms"
-import { site } from "@/lib/site"
+import { site, submitMailto } from "@/lib/site"
 
 export const metadata: Metadata = {
   title: "What we're about",
@@ -126,12 +126,20 @@ export default function AboutPage() {
           <div>
             <h2 className="text-display-sm uppercase">Get involved</h2>
             <p className="mt-2 max-w-[36rem] text-body-md text-on-surface-variant">
-              Read and share the stories, support the work, or tell us about a story that belongs here.
+              Read and share the stories, support the work, or send us a story that belongs here. Submissions are made by
+              email to{" "}
+              <a href={submitMailto()} className="font-semibold text-on-surface underline decoration-terracotta underline-offset-4 hover:text-primary">
+                {site.submissionsEmail}
+              </a>
+              .
             </p>
           </div>
           <div className="flex flex-wrap gap-3">
             <Button href="/stories" variant="secondary">
               Read the stories
+            </Button>
+            <Button href="/submit" variant="secondary-violet">
+              Submit a story
             </Button>
             <Button href="/donate">Donate</Button>
           </div>

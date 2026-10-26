@@ -5,6 +5,7 @@ import { Reveal } from "@/components/reveal"
 import { StoryCard } from "@/components/story-card"
 import { StoryGrid } from "@/components/story-grid"
 import { StoryNav, ThemeChips } from "@/components/story-nav"
+import { SubmitBand } from "@/components/submit-band"
 import { GROUPS, isThemeId, themeLabel, typesInGroup } from "@/lib/forms"
 import { countByForm, countByTheme, listPublished } from "@/lib/posts"
 
@@ -40,6 +41,7 @@ export default async function StoriesPage({ searchParams }: { searchParams: Prom
       ) : (
         <GroupSections counts={counts} />
       )}
+      <SubmitBand />
     </>
   )
 }

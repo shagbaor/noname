@@ -5,6 +5,7 @@ import { PlayButton, TrackWaveform } from "@/components/player"
 import { Reveal } from "@/components/reveal"
 import { Cover, StoryCard } from "@/components/story-card"
 import { StoryBody } from "@/components/story-body"
+import { SubmitBand } from "@/components/submit-band"
 import { Badge, formTone } from "@/components/ui/badge"
 import { formatDate, formatTime } from "@/lib/format"
 import { formMeta, groupById, storyHref, themeLabel, USES_IMAGES } from "@/lib/forms"
@@ -171,6 +172,8 @@ export default async function StoryPage({ params }: Props) {
           </Reveal>
         </aside>
       </div>
+
+      <SubmitBand type={meta.label} />
 
       {related.length > 0 && (
         <section className="shell border-t border-outline-variant/60 pt-10 pb-[clamp(3rem,6vw,5rem)]">

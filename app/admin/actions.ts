@@ -11,6 +11,7 @@ import {
   verifyPassword,
 } from "@/lib/auth"
 import { isFormId, isThemeId, PATTERNS, type Pattern } from "@/lib/forms"
+import { deleteSubscriber } from "@/lib/subscribers"
 import { createPost, deletePost, getById, slugTaken, updatePost, type PostImage, type PostInput } from "@/lib/posts"
 
 export type FormState = { error?: string; ok?: string; email?: string } | undefined
@@ -161,4 +162,11 @@ export async function removePost(data: FormData) {
   if (id) await deletePost(id)
   revalidatePath("/", "layout")
   redirect("/admin?deleted=1")
+}
+
+export async function removeSubscriber(data: FormData) {
+  await requireAdmin()
+  const id = Number(data.get("id"))
+  if (id) await deleteSubscriber(id)
+  revalidatePath("/admin/subscribers")
 }
