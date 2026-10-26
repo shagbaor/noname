@@ -1,10 +1,11 @@
 import { formToken } from "@/lib/anti-spam"
 import { listApproved } from "@/lib/comments"
 import { formatDate } from "@/lib/format"
+import { site } from "@/lib/site"
 import { CommentForm } from "./comment-form"
 import { Reveal } from "./reveal"
 
-export async function Comments({ postId }: { postId: number }) {
+export async function Comments({ postId, title }: { postId: number; title: string }) {
   const comments = await listApproved(postId)
   return (
     <section aria-labelledby="comments-title" className="shell pb-[clamp(2.5rem,5vw,4rem)]">
@@ -45,7 +46,14 @@ export async function Comments({ postId }: { postId: number }) {
           <div className="mt-8">
             <h3 className="mb-3 text-headline-md uppercase">Leave a response</h3>
             {/* Fresh token on every render: signed, tied to this story, and time-checked on submit */}
-            <CommentForm postId={postId} token={formToken(postId)} />
+            <CommentForm
+              postId={postId}
+              token={formToken(postId)}
+              email={site.submissionsEmail}
+              voiceMailto={`mailto:${site.submissionsEmail}?subject=${encodeURIComponent(`Voice response to: ${title}`)}&body=${encodeURIComponent(
+                "Hello,\n\nI've attached a voice recording responding to this story.\n\nHow I'd like to be credited (name, initials or anonymous):\n\n",
+              )}`}
+            />
           </div>
         </div>
       </div>

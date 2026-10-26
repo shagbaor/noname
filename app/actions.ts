@@ -1,7 +1,7 @@
 "use server"
 
 import { headers } from "next/headers"
-import { checkFormToken, ipHash, linkCount, MAX_AUDIO_BYTES, sniffAudio } from "@/lib/anti-spam"
+import { checkFormToken, ipHash, linkCount } from "@/lib/anti-spam"
 import { addComment, isDuplicate, recentCount } from "@/lib/comments"
 import { getPublishedById } from "@/lib/posts"
 import { addSubscriber } from "@/lib/subscribers"
@@ -54,22 +54,9 @@ export async function postComment(_: CommentState, data: FormData): Promise<Comm
   if (linkCount(body) > 1 || linkCount(name) > 0) return { error: "Comments can include at most one link." }
   if (await isDuplicate(hash, body)) return { error: "It looks like this comment has already been sent." }
 
-  // 6. Optional voice note: size cap and real-audio check by file signature
-  let audio: Buffer | null = null
-  let audioType = ""
-  const file = data.get("audio")
-  if (file instanceof File && file.size > 0) {
-    if (file.size > MAX_AUDIO_BYTES) return { error: "Voice notes can be up to 3 MB (about 3 minutes)." }
-    const bytes = new Uint8Array(await file.arrayBuffer())
-    const type = sniffAudio(bytes)
-    if (!type) return { error: "That file doesn't look like an audio recording. Try MP3, M4A, WAV, OGG or WebM." }
-    audio = Buffer.from(bytes)
-    audioType = type
-  }
+  // Voice notes are not accepted here: they're emailed in and uploaded by editors
+  if (body.length < 2) return { error: "Please write a little more." }
 
-  if (!body && !audio) return { error: "Write a comment or add a voice note." }
-  if (body && body.length < 2 && !audio) return { error: "Please write a little more." }
-
-  await addComment({ postId, name, body, audio, audioType, ipHash: hash })
+  await addComment({ postId, name, body, audio: null, audioType: "", ipHash: hash })
   return { ok: "Thank you. Your comment will appear once an editor approves it." }
 }

@@ -24,6 +24,7 @@ export type Post = {
   images: PostImage[]
   videoUrl: string
   themes: string[]
+  category: string
   featured: boolean
   status: "draft" | "published"
   publishedAt: Date | null
@@ -34,9 +35,11 @@ export type Post = {
 const COLUMNS = `
   id, slug, title, form, excerpt, body, author, region, era, location, language,
   cover_url AS "coverUrl", pattern, audio_url AS "audioUrl", duration_sec AS "durationSec",
-  transcribed, images, video_url AS "videoUrl", themes, featured, status,
+  transcribed, images, video_url AS "videoUrl", themes, category, featured, status,
   published_at AS "publishedAt", created_at AS "createdAt", updated_at AS "updatedAt"
 `
+
+const NOT_NEWS = "form <> 'news'"
 
 export type PostFilter = {
   form?: FormId
@@ -52,6 +55,8 @@ export type PostFilter = {
 export async function listPublished(filter: PostFilter = {}): Promise<Post[]> {
   const where = ["status = 'published'"]
   const params: unknown[] = []
+  // News has its own section; keep it out of story listings unless asked for
+  if (!filter.form && !filter.forms?.length) where.push(NOT_NEWS)
   if (filter.form) {
     params.push(filter.form)
     where.push(`form = $${params.length}`)
@@ -89,7 +94,7 @@ export async function listPublished(filter: PostFilter = {}): Promise<Post[]> {
 
 export async function getFeatured(): Promise<Post | null> {
   const rows = await query<Post>(
-    `SELECT ${COLUMNS} FROM posts WHERE status = 'published'
+    `SELECT ${COLUMNS} FROM posts WHERE status = 'published' AND ${NOT_NEWS}
      ORDER BY featured DESC, published_at DESC NULLS LAST LIMIT 1`,
   )
   return rows[0] ?? null
@@ -110,14 +115,14 @@ export async function getPublishedById(id: number): Promise<{ id: number } | nul
 
 export async function countByForm(): Promise<Record<string, number>> {
   const rows = await query<{ form: string; n: number }>(
-    `SELECT form, count(*)::int AS n FROM posts WHERE status = 'published' GROUP BY form`,
+    `SELECT form, count(*)::int AS n FROM posts WHERE status = 'published' AND ${NOT_NEWS} GROUP BY form`,
   )
   return Object.fromEntries(rows.map((r) => [r.form, r.n]))
 }
 
 export async function countByTheme(): Promise<Record<string, number>> {
   const rows = await query<{ theme: string; n: number }>(
-    `SELECT unnest(themes) AS theme, count(*)::int AS n FROM posts WHERE status = 'published' GROUP BY 1`,
+    `SELECT unnest(themes) AS theme, count(*)::int AS n FROM posts WHERE status = 'published' AND ${NOT_NEWS} GROUP BY 1`,
   )
   return Object.fromEntries(rows.map((r) => [r.theme, r.n]))
 }
@@ -164,7 +169,7 @@ function values(p: PostInput) {
   return [
     p.slug, p.title, p.form, p.excerpt, p.body, p.author, p.region, p.era, p.location,
     p.language, p.coverUrl, p.pattern, p.audioUrl, p.durationSec, p.transcribed,
-    JSON.stringify(p.images), p.featured, p.status, p.videoUrl, p.themes,
+    JSON.stringify(p.images), p.featured, p.status, p.videoUrl, p.themes, p.category,
   ]
 }
 
@@ -172,8 +177,8 @@ export async function createPost(p: PostInput): Promise<number> {
   const rows = await query<{ id: number }>(
     `INSERT INTO posts (slug, title, form, excerpt, body, author, region, era, location,
        language, cover_url, pattern, audio_url, duration_sec, transcribed, images, featured,
-       status, video_url, themes, published_at)
-     VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,
+       status, video_url, themes, category, published_at)
+     VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,
        CASE WHEN $18 = 'published' THEN now() END)
      RETURNING id`,
     values(p),
@@ -186,10 +191,10 @@ export async function updatePost(id: number, p: PostInput): Promise<void> {
     `UPDATE posts SET slug=$1, title=$2, form=$3, excerpt=$4, body=$5, author=$6, region=$7,
        era=$8, location=$9, language=$10, cover_url=$11, pattern=$12, audio_url=$13,
        duration_sec=$14, transcribed=$15, images=$16, featured=$17, status=$18,
-       video_url=$19, themes=$20,
+       video_url=$19, themes=$20, category=$21,
        published_at = CASE WHEN $18 = 'published' THEN COALESCE(published_at, now()) END,
        updated_at = now()
-     WHERE id = $21`,
+     WHERE id = $22`,
     [...values(p), id],
   )
 }

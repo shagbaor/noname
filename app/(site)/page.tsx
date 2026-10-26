@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { DonateBand } from "@/components/donate-band"
+import { NewsCard } from "@/components/news-card"
 import { Reveal } from "@/components/reveal"
 import { SectionHeading } from "@/components/section-heading"
 import { Cover, StoryCard } from "@/components/story-card"
@@ -8,7 +9,7 @@ import { TextileArt } from "@/components/textile"
 import { Badge, formTone } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { timeline } from "@/lib/content"
-import { FORM_IDS, formMeta, GROUPS, storyHref, typesInGroup, type Pattern } from "@/lib/forms"
+import { STORY_FORM_IDS, formMeta, GROUPS, storyHref, typesInGroup, type Pattern } from "@/lib/forms"
 import { countByForm, getFeatured, listPublished } from "@/lib/posts"
 import { toTrack } from "@/lib/track"
 
@@ -17,14 +18,15 @@ export const dynamic = "force-dynamic"
 const GROUP_PATTERNS: Pattern[] = ["mudcloth", "adire", "kente", "chevron"]
 
 export default async function Home() {
-  const [featured, counts, testimonies] = await Promise.all([
+  const [featured, counts, testimonies, news] = await Promise.all([
     getFeatured(),
     countByForm(),
     listPublished({ form: "oral-history", limit: 3 }),
+    listPublished({ form: "news", limit: 3 }),
   ])
   // Testimonies get their own section below, so leave them out of "Latest"
   const latest = await listPublished({
-    forms: FORM_IDS.filter((f) => f !== "oral-history"),
+    forms: STORY_FORM_IDS.filter((f) => f !== "oral-history"),
     limit: 3,
     excludeId: featured?.id,
   })
@@ -186,6 +188,25 @@ export default async function Home() {
           ))}
         </ol>
       </section>
+
+      {/* News */}
+      {news.length > 0 && (
+        <section className="shell section-y pt-0!">
+          <SectionHeading
+            index="05"
+            eyebrow="News"
+            title="From the archive"
+            action={<Button href="/news" variant="ghost">All news →</Button>}
+          />
+          <ul className="mt-6 grid grid-cols-[repeat(auto-fill,minmax(min(100%,19rem),1fr))] gap-4">
+            {news.map((p, i) => (
+              <Reveal as="li" key={p.id} delay={i * 80}>
+                <NewsCard post={p} />
+              </Reveal>
+            ))}
+          </ul>
+        </section>
+      )}
 
       <DonateBand />
     </>

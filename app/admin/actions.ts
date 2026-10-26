@@ -10,7 +10,7 @@ import {
   startSession,
   verifyPassword,
 } from "@/lib/auth"
-import { isFormId, isThemeId, PATTERNS, type Pattern } from "@/lib/forms"
+import { isFormId, isThemeId, NEWS_CATEGORIES, PATTERNS, type Pattern } from "@/lib/forms"
 import { deleteComment, deleteFromSameSource, setCommentStatus } from "@/lib/comments"
 import { deleteSubscriber } from "@/lib/subscribers"
 import { createPost, deletePost, getById, slugTaken, updatePost, type PostImage, type PostInput } from "@/lib/posts"
@@ -142,6 +142,7 @@ export async function savePost(_: FormState, data: FormData): Promise<FormState>
     images,
     videoUrl,
     themes: data.getAll("themes").filter(isThemeId),
+    category: form === "news" && (NEWS_CATEGORIES as readonly string[]).includes(String(data.get("category"))) ? String(data.get("category")) : "",
     featured: data.get("featured") === "on",
     status: data.get("status") === "published" ? "published" : "draft",
   }

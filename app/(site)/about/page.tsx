@@ -74,6 +74,36 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* Dedication */}
+      <section id="for-oliver" aria-labelledby="for-oliver-title" className="shell section-y scroll-mt-20">
+        <Reveal className="relative mx-auto max-w-[44rem] overflow-hidden rounded-lg border border-marigold/30 bg-surface-container-low px-[clamp(1.5rem,6vw,4rem)] py-[clamp(2.5rem,6vw,4.5rem)] text-center shadow-sheet">
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-1.5 opacity-70" aria-hidden>
+            <TextileArt pattern="kente" />
+          </div>
+          <span className="mx-auto block size-3 rotate-45 bg-marigold" aria-hidden />
+          <p className="mt-6 text-label-md uppercase tracking-[0.3em] text-marigold">A dedication</p>
+          <h2 id="for-oliver-title" className="mt-2 text-display-lg uppercase">For Oliver</h2>
+          <div className="mt-8 space-y-5 font-serif text-[clamp(1.15rem,1.05rem+0.45vw,1.4rem)] leading-[1.75] text-on-surface italic">
+            <p>
+              This archive is dedicated to Oliver, who always believed that stories are meant to be told, and
+              that every story deserves someone who listens.
+            </p>
+            <p>
+              Oliver listened. To half-finished poems read aloud too fast. To stories that didn&apos;t yet know how
+              they ended. To the quiet ones that took years to find their words. And every time came the same
+              gentle nudge: <span className="not-italic text-primary">write it down.</span>
+            </p>
+            <p>So I did. And I kept going, until there was room here for everyone else&apos;s stories too.</p>
+            <p>
+              Every essay, every poem, every voice kept in these pages carries a little of that belief. Thank you,
+              Oliver, for listening first, and for knowing before I did that our stories were worth keeping.
+            </p>
+          </div>
+          <p className="mt-8 text-label-lg uppercase text-on-surface-variant">With love, always</p>
+          <span className="mx-auto mt-6 block h-px w-16 bg-terracotta" aria-hidden />
+        </Reveal>
+      </section>
+
       {/* What we keep */}
       <section className="shell section-y">
         <Reveal>

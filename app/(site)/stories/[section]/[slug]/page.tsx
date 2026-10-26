@@ -12,6 +12,7 @@ import { formatDate, formatTime } from "@/lib/format"
 import { formMeta, groupById, storyHref, themeLabel, USES_IMAGES } from "@/lib/forms"
 import { getPublishedBySlug, listPublished } from "@/lib/posts"
 import { toTrack } from "@/lib/track"
+import { videoEmbed } from "@/lib/video"
 
 export const dynamic = "force-dynamic"
 
@@ -20,18 +21,6 @@ type Props = { params: Promise<{ section: string; slug: string }> }
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = await getPublishedBySlug((await params).slug)
   return post ? { title: post.title, description: post.excerpt } : {}
-}
-
-/** YouTube / Vimeo links become embeds; anything else plays as a video file. */
-function videoEmbed(url: string): string | null {
-  try {
-    const u = new URL(url)
-    const host = u.hostname.replace(/^www\.|^m\./, "")
-    if (host === "youtube.com" && u.searchParams.get("v")) return `https://www.youtube-nocookie.com/embed/${u.searchParams.get("v")}`
-    if (host === "youtu.be") return `https://www.youtube-nocookie.com/embed${u.pathname}`
-    if (host === "vimeo.com" && /^\/\d+/.test(u.pathname)) return `https://player.vimeo.com/video${u.pathname}`
-  } catch {}
-  return null
 }
 
 export default async function StoryPage({ params }: Props) {
@@ -50,7 +39,7 @@ export default async function StoryPage({ params }: Props) {
     ["Language", post.language],
   ].filter(([, v]) => v)
 
-  const hasPlayer = post.form === "oral-history" || post.form === "song" || (post.form === "interview" && post.audioUrl)
+  const hasPlayer = post.form === "oral-history" || post.form === "song" || ((post.form === "interview" || post.form === "poem") && post.audioUrl)
   const gallery = (USES_IMAGES as string[]).includes(post.form) && post.images.length > 0
   const embed = post.videoUrl ? videoEmbed(post.videoUrl) : null
   const textOnly = ["poem", "letter", "diary"].includes(post.form)
@@ -174,7 +163,7 @@ export default async function StoryPage({ params }: Props) {
         </aside>
       </div>
 
-      <Comments postId={post.id} />
+      <Comments postId={post.id} title={post.title} />
 
       <SubmitBand type={meta.label} />
 

@@ -6,7 +6,7 @@ import { StoryGrid } from "@/components/story-grid"
 import { StoryNav, ThemeChips } from "@/components/story-nav"
 import { SubmitBand } from "@/components/submit-band"
 import { TestimonyRow } from "@/components/testimony-row"
-import { groupById, isThemeId, storyHref, typeBySection, typesInGroup, USES_AUDIO } from "@/lib/forms"
+import { groupById, isThemeId, storyHref, typeBySection, typesInGroup } from "@/lib/forms"
 import { countByForm, countByTheme, getPublishedBySlug, listPublished } from "@/lib/posts"
 import { toTrack } from "@/lib/track"
 
@@ -49,7 +49,7 @@ export default async function SectionPage({ params, searchParams }: Props) {
     countByForm(),
     countByTheme(),
   ])
-  const asList = r.type && (USES_AUDIO as string[]).includes(r.type.id) && r.type.id !== "interview"
+  const asList = r.type?.id === "oral-history" || r.type?.id === "song"
 
   return (
     <>

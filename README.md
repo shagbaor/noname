@@ -35,9 +35,17 @@ pnpm dev                                 # http://localhost:3000
 
 ## Comments
 
-Readers can respond to any story without an account, with text and/or a voice note (recorded in the browser or uploaded, up to 3 MB ≈ 3 minutes). Every comment is held for approval at `/admin/comments`.
+Readers can respond to any story without an account (text only; voice responses are emailed in and uploaded by editors). Every comment is held for approval at `/admin/comments`.
 
-Spam defences (all server-side, see `lib/anti-spam.ts` and `postComment` in `app/actions.ts`): moderation queue; HMAC-signed form token tied to the story with a minimum 3 s and maximum 6 h age; honeypot field; per-visitor rate limit (3 per 10 min, 15 per day) keyed on a hashed IP (raw IPs are never stored); length limits, at most one link, duplicate detection; audio verified by file signature (not the browser's claimed type) and served with `nosniff`. Pending voice notes are only playable by editors.
+Spam defences (all server-side, see `lib/anti-spam.ts` and `postComment` in `app/actions.ts`): moderation queue; HMAC-signed form token tied to the story with a minimum 3 s and maximum 6 h age; honeypot field; per-visitor rate limit (3 per 10 min, 15 per day) keyed on a hashed IP (raw IPs are never stored); length limits, at most one link, duplicate detection; 
+
+## Editing & uploads
+
+The editor (`components/admin/post-editor.tsx`) adapts to each type using `lib/editor-config.ts`: labels, placeholders, which details are asked for, which media (audio, video or image gallery), whether media comes first, the writing style (prose, verse, letter paper, transcript with speaker buttons), starter templates and a live preview. Editors upload audio, video and images straight from the browser to Vercel Blob (`/api/admin/upload` issues short-lived, type- and size-limited tokens to signed-in editors only; `BLOB_READ_WRITE_TOKEN` is set by the connected Blob store).
+
+## News
+
+News posts (`/news`, `/news/<slug>`) share the posts table (`form = 'news'`, with a `category`) but are kept out of story listings, counts and search.
 
 ## Writing posts
 

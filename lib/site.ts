@@ -59,6 +59,7 @@ export const nav: NavItem[] = [
       },
     ],
   },
+  { label: "News", href: "/news" },
   { label: "About", href: "/about" },
   { label: "Submit", href: "/submit" },
 ]

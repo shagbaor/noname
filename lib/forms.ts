@@ -47,14 +47,30 @@ export const THEMES = [
   { id: "joy", label: "Joy & celebration" },
 ] as const
 
-export type FormId = (typeof TYPES)[number]["id"]
+/** News lives alongside stories in the same table and editor, but outside the story groups. */
+export const NEWS = {
+  id: "news",
+  group: "news",
+  section: "news",
+  label: "News",
+  plural: "News",
+  blurb: "Announcements, events, calls for submissions and press.",
+} as const
+
+export const NEWS_CATEGORIES = ["Announcement", "Event", "Call for submissions", "Press", "Update"] as const
+
+export type StoryFormId = (typeof TYPES)[number]["id"]
+export type FormId = StoryFormId | typeof NEWS.id
 export type GroupId = (typeof GROUPS)[number]["id"]
 export type ThemeId = (typeof THEMES)[number]["id"]
-export type StoryType = (typeof TYPES)[number]
+export type StoryType = (typeof TYPES)[number] | typeof NEWS
 
-export const FORM_IDS = TYPES.map((t) => t.id) as FormId[]
+/** Story types only (no news): what the stories, archive and counts show */
+export const STORY_FORM_IDS = TYPES.map((t) => t.id) as StoryFormId[]
+export const FORM_IDS = [...STORY_FORM_IDS, NEWS.id] as FormId[]
 
 export function formMeta(id: string): StoryType {
+  if (id === NEWS.id) return NEWS
   return TYPES.find((t) => t.id === id) ?? TYPES[0]
 }
 
@@ -70,7 +86,7 @@ export function groupById(id: string) {
   return GROUPS.find((g) => g.id === id)
 }
 
-export function typesInGroup(id: GroupId): StoryType[] {
+export function typesInGroup(id: GroupId) {
   return TYPES.filter((t) => t.group === id)
 }
 
@@ -84,12 +100,13 @@ export function isThemeId(v: unknown): v is ThemeId {
 
 /** Canonical public URL for a post. */
 export function storyHref(p: { form: string; slug: string }) {
+  if (p.form === NEWS.id) return `/news/${p.slug}`
   return `/stories/${formMeta(p.form).section}/${p.slug}`
 }
 
 /** Which media fields a type uses, for the editor and story page. */
-export const USES_AUDIO: FormId[] = ["oral-history", "song", "interview"]
-export const USES_IMAGES: FormId[] = ["photo-essay", "artwork", "document"]
+export const USES_AUDIO: FormId[] = ["oral-history", "song", "interview", "poem"]
+export const USES_IMAGES: FormId[] = ["photo-essay", "artwork", "document", "letter", "diary", "tribute"]
 export const USES_VIDEO: FormId[] = ["film"]
 
 export const PATTERNS = ["mudcloth", "kente", "adire", "chevron"] as const
