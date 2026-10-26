@@ -14,11 +14,30 @@ export function SiteHeader() {
   const [scrolled, setScrolled] = useState(false)
   const pathname = usePathname()
   const ref = useRef<HTMLElement>(null)
+  // Hover intent: a short grace period before closing, so diagonal cursor
+  // moves toward the menu don't snap it shut
+  const closeTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
+  const openedByHover = useRef(false)
+  // Mirror of `menu` for event handlers that fire before React re-renders
+  const menuRef = useRef<string | null>(null)
+  menuRef.current = menu
+
+  const openMenu = (label: string) => {
+    clearTimeout(closeTimer.current)
+    menuRef.current = label
+    setMenu(label)
+  }
+  const closeMenuSoon = (label: string) => {
+    clearTimeout(closeTimer.current)
+    closeTimer.current = setTimeout(() => setMenu((m) => (m === label ? null : m)), 250)
+  }
 
   useEffect(() => {
     setMobileOpen(false)
     setMenu(null)
   }, [pathname])
+
+  useEffect(() => () => clearTimeout(closeTimer.current), [])
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8)
@@ -52,21 +71,35 @@ export function SiteHeader() {
           <Logo />
         </Link>
 
-        <nav aria-label="Primary" className="hidden items-center gap-1 lg:flex">
+        <nav aria-label="Primary" className="hidden h-full items-stretch gap-1 lg:flex">
           {nav.map((item) =>
             item.columns ? (
               <div
                 key={item.href}
-                // Wide (multi-column) menus anchor to the header; small ones to their button
-                className={(item.columns.length ?? 0) > 1 ? undefined : "relative"}
-                onMouseEnter={() => setMenu(item.label)}
-                onMouseLeave={() => setMenu((m) => (m === item.label ? null : m))}
+                // Full header height so there's no dead gap between the button and its menu.
+                // Wide (multi-column) menus anchor to the header; small ones to their button.
+                className={clsx("flex items-center", item.columns.length <= 1 && "relative")}
+                onMouseEnter={() => {
+                  if (menuRef.current !== item.label) openedByHover.current = true
+                  openMenu(item.label)
+                }}
+                onMouseLeave={() => closeMenuSoon(item.label)}
               >
                 <button
                   type="button"
                   aria-expanded={menu === item.label}
                   aria-controls={`menu-${item.label}`}
-                  onClick={() => setMenu((m) => (m === item.label ? null : item.label))}
+                  onClick={() => {
+                    // A click right after hover-open keeps it open; a second click closes it
+                    if (openedByHover.current) {
+                      openedByHover.current = false
+                      openMenu(item.label)
+                      return
+                    }
+                    const next = menuRef.current === item.label ? null : item.label
+                    menuRef.current = next
+                    setMenu(next)
+                  }}
                   className={clsx(
                     "flex items-center gap-1.5 rounded-full px-3.5 py-2 text-label-lg uppercase transition-colors",
                     isActive(item.href) ? "text-primary" : "text-on-surface-variant hover:text-on-surface",
@@ -83,7 +116,7 @@ export function SiteHeader() {
                 href={item.href}
                 aria-current={isActive(item.href) ? "page" : undefined}
                 className={clsx(
-                  "rounded-full px-3.5 py-2 text-label-lg uppercase transition-colors",
+                  "self-center rounded-full px-3.5 py-2 text-label-lg uppercase transition-colors",
                   isActive(item.href) ? "text-primary" : "text-on-surface-variant hover:text-on-surface",
                 )}
               >
