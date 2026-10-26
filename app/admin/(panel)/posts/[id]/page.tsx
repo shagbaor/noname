@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { storyHref } from "@/lib/forms"
 import { notFound } from "next/navigation"
 import { DeleteButton } from "@/components/admin/delete-button"
 import { PostEditor } from "@/components/admin/post-editor"
@@ -18,7 +19,7 @@ export default async function EditPostPage({ params }: { params: Promise<{ id: s
         </div>
         <div className="flex items-center gap-2">
           {post.status === "published" && (
-            <Link href={`/stories/${post.slug}`} className="rounded-full px-3 py-1.5 text-label-md uppercase text-outline hover:text-on-surface">
+            <Link href={storyHref(post)} className="rounded-full px-3 py-1.5 text-label-md uppercase text-outline hover:text-on-surface">
               View live ↗
             </Link>
           )}

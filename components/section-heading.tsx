@@ -10,9 +10,9 @@ export function SectionHeading({
   action?: React.ReactNode
 }) {
   return (
-    <header className="flex flex-wrap items-end justify-between gap-6 border-b border-outline-variant/60 pb-6">
+    <header className="flex flex-wrap items-end justify-between gap-4 border-b border-outline-variant/60 pb-4">
       <div>
-        <p className="mb-3 flex items-center gap-3 text-label-md uppercase text-primary">
+        <p className="mb-2 flex items-center gap-3 text-label-md uppercase text-primary">
           <span className="tabular-nums text-marigold">{index}</span>
           <span className="h-px w-8 bg-outline-variant" aria-hidden />
           {eyebrow}

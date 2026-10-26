@@ -4,7 +4,7 @@ import { startTransition, useActionState, useState } from "react"
 import { savePost } from "@/app/admin/actions"
 import { ButtonEl } from "@/components/ui/button"
 import { formatTime } from "@/lib/format"
-import { FORMS, PATTERNS, REGIONS, type FormId } from "@/lib/forms"
+import { GROUPS, PATTERNS, REGIONS, THEMES, typesInGroup, USES_AUDIO, USES_IMAGES, USES_VIDEO, type FormId } from "@/lib/forms"
 import type { Post } from "@/lib/posts"
 import { Field, inputClass } from "./field"
 
@@ -13,6 +13,11 @@ const BODY_HINTS: Partial<Record<FormId, string>> = {
   letter: "Line breaks are kept, so write it as the letter reads.",
   interview: "Start each turn with **Q:** and **A:** (or speaker names), separated by blank lines.",
   "oral-history": "Paste the transcript. Start turns with **Narrator:** / **Interviewer:**.",
+  diary: "Line breaks are kept. Put each entry's date in **bold** on its own line.",
+  song: "Lyrics keep their line breaks. Add the story behind the song after a blank line.",
+  document: "Transcribe or describe the document; add scans below.",
+  tribute: "Put birth and death years in the Era field, e.g. 1956 – 2021.",
+  film: "Synopsis, credits and context for the film.",
 }
 
 export function PostEditor({ post }: { post?: Post }) {
@@ -51,8 +56,8 @@ export function PostEditor({ post }: { post?: Post }) {
           />
         </Field>
 
-        {form === "oral-history" && (
-          <fieldset className="grid gap-5 rounded-md border border-outline-variant/60 p-5 sm:grid-cols-2">
+        {/* Media fields stay in the DOM (just hidden) so switching type never drops their values */}
+        <fieldset hidden={!USES_AUDIO.includes(form)} className="grid gap-5 rounded-md border border-outline-variant/60 p-5 sm:grid-cols-2">
             <legend className="px-2 text-label-md uppercase text-tertiary">Recording</legend>
             <Field label="Audio URL" hint="Link to an .mp3/.m4a file. Leave empty if not ready." className="sm:col-span-2">
               <input name="audioUrl" type="url" defaultValue={post?.audioUrl} placeholder="https://…" className={inputClass} />
@@ -70,10 +75,15 @@ export function PostEditor({ post }: { post?: Post }) {
               <span className="text-body-sm">Transcript available</span>
             </label>
           </fieldset>
-        )}
 
-        {form === "photo-essay" && (
-          <Field label="Photographs" hint="One per line: image URL | caption">
+        <div hidden={!USES_VIDEO.includes(form)}>
+          <Field label="Video URL" hint="YouTube or Vimeo link, or a direct .mp4 file.">
+            <input name="videoUrl" type="url" defaultValue={post?.videoUrl} placeholder="https://youtube.com/watch?v=…" className={inputClass} />
+          </Field>
+        </div>
+
+        <div hidden={!USES_IMAGES.includes(form)}>
+          <Field label={form === "document" ? "Scans" : form === "artwork" ? "Artworks" : "Photographs"} hint="One per line: image URL | caption">
             <textarea
               name="images"
               rows={6}
@@ -82,7 +92,21 @@ export function PostEditor({ post }: { post?: Post }) {
               className={`${inputClass} font-mono text-[14px]`}
             />
           </Field>
-        )}
+        </div>
+
+        <fieldset>
+          <legend className="mb-2 block text-label-md uppercase text-on-surface-variant">Themes</legend>
+          <div className="flex flex-wrap gap-2">
+            {THEMES.map((t) => (
+              <label key={t.id} className="cursor-pointer">
+                <input type="checkbox" name="themes" value={t.id} defaultChecked={post?.themes.includes(t.id)} className="peer sr-only" />
+                <span className="block rounded-full border border-outline-variant px-3 py-1.5 text-label-md uppercase text-on-surface-variant transition-colors peer-checked:border-violet peer-checked:bg-violet/25 peer-checked:text-secondary peer-focus-visible:outline-2 peer-focus-visible:outline-secondary">
+                  {t.label}
+                </span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
       </div>
 
       <aside className="space-y-5 lg:sticky lg:top-24 lg:self-start">
@@ -93,12 +117,16 @@ export function PostEditor({ post }: { post?: Post }) {
               <option value="published">Published</option>
             </select>
           </Field>
-          <Field label="Form">
+          <Field label="Type">
             <select name="form" value={form} onChange={(e) => setForm(e.target.value as FormId)} className={inputClass}>
-              {FORMS.map((f) => (
-                <option key={f.id} value={f.id}>
-                  {f.label}
-                </option>
+              {GROUPS.map((g) => (
+                <optgroup key={g.id} label={g.label}>
+                  {typesInGroup(g.id).map((t) => (
+                    <option key={t.id} value={t.id}>
+                      {t.label}
+                    </option>
+                  ))}
+                </optgroup>
               ))}
             </select>
           </Field>
@@ -117,7 +145,7 @@ export function PostEditor({ post }: { post?: Post }) {
         </div>
 
         <div className="space-y-5 rounded-md border border-outline-variant/60 bg-surface-container-low p-5">
-          <Field label={form === "oral-history" ? "Narrator" : "Author"}>
+          <Field label={form === "oral-history" ? "Narrator" : form === "song" ? "Artist" : "Author"}>
             <input name="author" defaultValue={post?.author} className={inputClass} />
           </Field>
           <Field label="Region">

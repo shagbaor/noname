@@ -26,11 +26,11 @@ function lines(text: string) {
 
 export function StoryBody({ body, form }: { body: string; form: FormId }) {
   const blocks = body.replace(/\r\n/g, "\n").trim().split(/\n{2,}/)
-  const keepLines = form === "poem" || form === "letter"
+  const keepLines = ["poem", "letter", "diary", "song"].includes(form)
 
   if (form === "poem") {
     return (
-      <div className="space-y-8 font-serif text-[clamp(1.25rem,1.1rem+0.6vw,1.6rem)] leading-[1.7] italic">
+      <div className="space-y-8 font-serif text-[clamp(1.15rem,1.05rem+0.4vw,1.4rem)] leading-[1.7] italic">
         {blocks.map((b, i) => (
           <p key={i}>{lines(b)}</p>
         ))}
@@ -41,19 +41,19 @@ export function StoryBody({ body, form }: { body: string; form: FormId }) {
   const content = blocks.map((b, i) => {
     if (b.startsWith("## "))
       return (
-        <h2 key={i} className="pt-6 text-headline-lg uppercase text-on-surface">
+        <h2 key={i} className="pt-4 text-headline-lg uppercase text-on-surface">
           {b.slice(3)}
         </h2>
       )
     if (b.startsWith("> "))
       return (
-        <blockquote key={i} className="relative my-4 border-l-2 border-terracotta pl-6 font-serif text-[clamp(1.35rem,1.2rem+0.6vw,1.75rem)] leading-snug text-on-surface italic">
+        <blockquote key={i} className="relative my-4 border-l-2 border-terracotta pl-6 font-serif text-[clamp(1.2rem,1.1rem+0.4vw,1.5rem)] leading-snug text-on-surface italic">
           {inline(b.replace(/^> ?/gm, ""))}
         </blockquote>
       )
     // Interview / transcript turns: "**Q:** …" or "**Narrator:** …"
     const turn = /^\*\*([^*]{1,30}):\*\*\s*/.exec(b)
-    if (turn && (form === "interview" || form === "oral-history"))
+    if (turn && ["interview", "oral-history", "song"].includes(form))
       return (
         <div key={i} className="grid gap-1 sm:grid-cols-[8rem_1fr] sm:gap-6">
           <span className="pt-1 text-label-lg uppercase text-primary">{turn[1]}</span>
@@ -63,17 +63,17 @@ export function StoryBody({ body, form }: { body: string; form: FormId }) {
     return <p key={i}>{keepLines ? lines(b) : inline(b)}</p>
   })
 
-  if (form === "letter") {
+  if (form === "letter" || form === "diary") {
     return (
       <div className="relative rounded-md border border-outline-variant/60 bg-surface-container px-[clamp(1.5rem,5vw,4rem)] py-[clamp(2rem,5vw,4rem)] shadow-card">
         <span className="absolute top-6 right-6 size-10 rotate-45 border border-marigold/50" aria-hidden />
-        <div className="space-y-5 font-serif text-[1.2rem] leading-[1.8] text-on-surface">{content}</div>
+        <div className="space-y-4 font-serif text-[1.1rem] leading-[1.8] text-on-surface">{content}</div>
       </div>
     )
   }
 
   return (
-    <div className={clsx("space-y-6 text-body-lg text-on-surface-variant", form === "essay" && "first-letter-drop")}>
+    <div className={clsx("space-y-5 text-body-lg text-on-surface-variant", ["essay", "memoir", "tribute"].includes(form) && "first-letter-drop")}>
       {content}
     </div>
   )

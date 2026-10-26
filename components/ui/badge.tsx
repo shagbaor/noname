@@ -40,6 +40,13 @@ const FORM_TONES: Record<string, Tone> = {
   "photo-essay": "marigold",
   interview: "terracotta",
   fiction: "violet",
+  memoir: "terracotta",
+  diary: "marigold",
+  song: "acacia",
+  artwork: "violet",
+  film: "marigold",
+  document: "neutral",
+  tribute: "neutral",
 }
 
 export function formTone(form: string): Tone {

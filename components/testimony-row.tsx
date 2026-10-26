@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { formatTime } from "@/lib/format"
+import { storyHref } from "@/lib/forms"
 import { PlayButton, TrackWaveform, usePlayer, type Track } from "./player"
 import { Badge } from "./ui/badge"
 
@@ -26,16 +27,16 @@ export function TestimonyRow({
 
   return (
     <div
-      className={`group grid grid-cols-[auto_1fr_auto] items-center gap-4 rounded-md px-2 py-5 transition-colors duration-500 md:grid-cols-[auto_minmax(0,1.3fr)_minmax(0,1fr)_auto] md:gap-6 md:px-4 ${active ? "bg-surface-container-low" : "hover:bg-surface-container-low/60"}`}
+      className={`group grid grid-cols-[auto_1fr_auto] items-center gap-3 rounded-md px-2 py-4 transition-colors duration-500 md:grid-cols-[auto_minmax(0,1.3fr)_minmax(0,1fr)_auto] md:gap-6 md:px-4 ${active ? "bg-surface-container-low" : "hover:bg-surface-container-low/60"}`}
     >
-      <div className="relative grid size-14 place-items-center rounded-full bg-surface-container-high font-display text-headline-sm text-primary transition-transform duration-500 group-hover:scale-105 md:size-16">
+      <div className="relative grid size-12 place-items-center rounded-full bg-surface-container-high font-display text-[18px] text-primary transition-transform duration-500 group-hover:scale-105 md:size-14">
         {initials || "—"}
         <span className="absolute -right-0.5 -bottom-0.5 size-3.5 rounded-full border-2 border-surface bg-tertiary" aria-hidden />
       </div>
 
       <div className="min-w-0">
-        <h3 className="text-headline-md uppercase">
-          <Link href={`/stories/${track.slug}`} className="hover:text-primary">
+        <h3 className="text-headline-sm uppercase">
+          <Link href={storyHref(track)} className="hover:text-primary">
             {track.title}
           </Link>
         </h3>

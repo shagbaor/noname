@@ -25,10 +25,12 @@ pnpm dev                                 # http://localhost:3000
 
 | Route | What |
 | --- | --- |
-| `/` | Home: featured story, story forms, latest, testimonies, timeline, donate |
-| `/stories`, `/stories?form=poem` | All stories, filterable by form |
-| `/stories/[slug]` | A story, laid out to suit its form (poem, letter, transcript, photo essay…) |
-| `/essays`, `/testimonies`, `/timeline`, `/archive`, `/donate` | Standalone nav pages |
+| `/` | Home: featured story, story groups, latest, testimonies, timeline, donate |
+| `/stories` | Stories hub: four groups (Written, Spoken, Visual, From the archive) with their types; `?theme=` filters by theme |
+| `/stories/written`, `/stories/essays`, `/stories/testimonies`… | A group or a single type |
+| `/stories/<type>/<slug>` | A story, laid out to suit its type (poem, letter, transcript, film, gallery…) |
+| `/archive`, `/archive/timeline` | Search and timeline |
+| `/about`, `/donate` | What we are about; donations |
 | `/admin` | Editor: sign in, then create, edit, publish and delete posts; change password at `/admin/account` |
 
 ## Writing posts
@@ -40,3 +42,7 @@ Bodies use light plain-text markup: blank line = new paragraph, `## Heading`, `>
 - **Sample content:** the seeded stories are marked "Sample". Delete or replace them from `/admin`. Timeline entries (`lib/content.ts`) are real milestones but need an editorial fact-check.
 - **Audio:** oral histories play their audio URL if one is set, otherwise playback is simulated.
 - **Name:** change the site name in `lib/site.ts`.
+
+## Database migrations
+
+Fresh databases: run `db/schema.sql`. Existing databases: also run each file in `db/migrations/` in order (they're safe to re-run).

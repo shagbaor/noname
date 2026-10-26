@@ -39,12 +39,12 @@ export function Logo({ className, size = "md" }: { className?: string; size?: "m
   const [first, ...rest] = site.name.split(" ")
   return (
     <span className={clsx("inline-flex items-center gap-2.5", className)}>
-      <LogoMark className={size === "lg" ? "size-14" : "size-9"} />
+      <LogoMark className={size === "lg" ? "size-12" : "size-8"} />
       <span className="flex flex-col leading-none">
         <span
           className={clsx(
             "font-display tracking-[0.04em] uppercase",
-            size === "lg" ? "text-[56px]" : "text-[30px]",
+            size === "lg" ? "text-[44px]" : "text-[26px]",
           )}
         >
           {first}
@@ -53,7 +53,7 @@ export function Logo({ className, size = "md" }: { className?: string; size?: "m
           <span
             className={clsx(
               "font-label font-semibold tracking-[0.42em] text-on-surface-variant uppercase",
-              size === "lg" ? "mt-1 text-[14px]" : "-mt-0.5 text-[9.5px]",
+              size === "lg" ? "mt-1 text-[12px]" : "-mt-0.5 text-[8.5px]",
             )}
           >
             {rest.join(" ")}

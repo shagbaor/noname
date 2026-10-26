@@ -15,7 +15,7 @@ const variants: Record<Variant, string> = {
 }
 
 const base =
-  "inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-label-lg uppercase transition-[background-color,transform,color] duration-200 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50"
+  "inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-label-lg uppercase transition-[background-color,transform,color] duration-200 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50"
 
 export function Button({
   variant = "primary",

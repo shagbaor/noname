@@ -11,7 +11,7 @@ export function StoryGrid({ posts, empty = "Nothing here yet. New stories are ad
     )
   }
   return (
-    <div className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,20rem),1fr))] gap-[clamp(1rem,2vw,2rem)]">
+    <div className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,17rem),1fr))] gap-[clamp(1rem,1.6vw,1.5rem)]">
       {posts.map((p, i) => (
         <Reveal key={p.id} delay={(i % 3) * 90}>
           <StoryCard post={p} />

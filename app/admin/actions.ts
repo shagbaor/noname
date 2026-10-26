@@ -10,7 +10,7 @@ import {
   startSession,
   verifyPassword,
 } from "@/lib/auth"
-import { isFormId, PATTERNS, type Pattern } from "@/lib/forms"
+import { isFormId, isThemeId, PATTERNS, type Pattern } from "@/lib/forms"
 import { createPost, deletePost, getById, slugTaken, updatePost, type PostImage, type PostInput } from "@/lib/posts"
 
 export type FormState = { error?: string; ok?: string; email?: string } | undefined
@@ -99,6 +99,8 @@ export async function savePost(_: FormState, data: FormData): Promise<FormState>
   const audioUrl = safeUrl(text(data, "audioUrl", 1000))
   if (coverUrl === null) return { error: "Cover image must be an http(s) URL." }
   if (audioUrl === null) return { error: "Audio must be an http(s) URL." }
+  const videoUrl = safeUrl(text(data, "videoUrl", 1000))
+  if (videoUrl === null) return { error: "Video must be an http(s) URL." }
 
   const durationSec = parseDuration(text(data, "duration", 20))
   if (Number.isNaN(durationSec)) return { error: "Duration should look like 28:44 or 1724." }
@@ -136,6 +138,8 @@ export async function savePost(_: FormState, data: FormData): Promise<FormState>
     durationSec,
     transcribed: data.get("transcribed") === "on",
     images,
+    videoUrl,
+    themes: data.getAll("themes").filter(isThemeId),
     featured: data.get("featured") === "on",
     status: data.get("status") === "published" ? "published" : "draft",
   }

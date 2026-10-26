@@ -5,6 +5,7 @@ export function toTrack(p: Post): Track {
   return {
     id: p.id,
     slug: p.slug,
+    form: p.form,
     title: p.title,
     narrator: p.author,
     language: p.language,

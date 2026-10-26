@@ -3,7 +3,7 @@ import { DeleteButton } from "@/components/admin/delete-button"
 import { Badge, formTone } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { formatDate } from "@/lib/format"
-import { formMeta } from "@/lib/forms"
+import { formMeta, storyHref } from "@/lib/forms"
 import { listAll } from "@/lib/posts"
 
 export default async function AdminPosts({
@@ -67,7 +67,7 @@ export default async function AdminPosts({
                   <td className="px-4 py-3">
                     <div className="flex justify-end gap-2">
                       {p.status === "published" && (
-                        <Link href={`/stories/${p.slug}`} className="rounded-full px-3 py-1.5 text-label-md uppercase text-outline hover:text-on-surface">
+                        <Link href={storyHref(p)} className="rounded-full px-3 py-1.5 text-label-md uppercase text-outline hover:text-on-surface">
                           View
                         </Link>
                       )}

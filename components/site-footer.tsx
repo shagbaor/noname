@@ -1,17 +1,17 @@
 import Link from "next/link"
-import { site } from "@/lib/site"
+import { nav, site } from "@/lib/site"
 import { Logo } from "./logo"
 
 export function SiteFooter() {
   return (
     <footer className="border-t border-outline-variant/60 bg-surface-container-lowest pb-28">
-      <div className="shell grid gap-10 pt-14 pb-10 md:grid-cols-[minmax(0,1fr)_auto] md:items-end">
+      <div className="shell grid gap-8 pt-10 pb-8 md:grid-cols-[minmax(0,1fr)_auto] md:items-end">
         <div>
-          <Logo size="lg" />
-          <p className="mt-5 max-w-[30rem] text-body-md text-on-surface-variant">{site.description}</p>
+          <Logo />
+          <p className="mt-4 max-w-[28rem] text-body-sm text-on-surface-variant">{site.description}</p>
         </div>
         <nav aria-label="Footer" className="flex flex-wrap gap-x-8 gap-y-3">
-          {[...site.nav, { label: "Donate", href: "/donate" }].map((l) => (
+          {[...nav, { label: "Timeline", href: "/archive/timeline" }, { label: "Donate", href: "/donate" }].map((l) => (
             <Link key={l.href} href={l.href} className="link-ghost text-label-lg uppercase text-on-surface-variant hover:text-on-surface">
               {l.label}
             </Link>

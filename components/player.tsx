@@ -4,6 +4,7 @@ import clsx from "clsx"
 import Link from "next/link"
 import { createContext, useContext, useEffect, useRef, useState } from "react"
 import { formatTime } from "@/lib/format"
+import { storyHref } from "@/lib/forms"
 import { Badge } from "./ui/badge"
 
 /*
@@ -15,6 +16,7 @@ import { Badge } from "./ui/badge"
 export type Track = {
   id: number
   slug: string
+  form: string
   title: string
   narrator: string
   language: string
@@ -195,7 +197,7 @@ function DockedPlayer() {
 
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
-            <Link href={`/stories/${t.slug}`} className="truncate font-display text-headline-sm uppercase hover:text-primary">
+            <Link href={storyHref(t)} className="truncate font-display text-headline-sm uppercase hover:text-primary">
               {t.title}
             </Link>
             {t.transcribed && t.language && (
