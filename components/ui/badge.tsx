@@ -32,9 +32,16 @@ export function Badge({
   )
 }
 
-export function categoryTone(category: string): Tone {
-  if (category === "Queer History") return "violet"
-  if (category === "Photo Essay") return "marigold"
-  if (category === "Archive Notes") return "terracotta"
-  return "neutral"
+const FORM_TONES: Record<string, Tone> = {
+  essay: "terracotta",
+  "oral-history": "acacia",
+  letter: "marigold",
+  poem: "violet",
+  "photo-essay": "marigold",
+  interview: "terracotta",
+  fiction: "violet",
+}
+
+export function formTone(form: string): Tone {
+  return FORM_TONES[form] ?? "neutral"
 }

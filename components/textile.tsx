@@ -1,6 +1,6 @@
 import clsx from "clsx"
 import { useId } from "react"
-import type { Pattern } from "@/lib/content"
+import type { Pattern } from "@/lib/forms"
 
 /*
  * Textile-inspired SVG fields used in place of photography until real archive

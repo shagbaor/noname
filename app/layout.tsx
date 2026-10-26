@@ -9,8 +9,9 @@ const archivoNarrow = Archivo_Narrow({ subsets: ["latin"], variable: "--font-arc
 const newsreader = Newsreader({ subsets: ["latin"], style: ["italic"], variable: "--font-newsreader" })
 
 export const metadata: Metadata = {
-  title: `${site.name} — ${site.tagline}`,
+  title: { default: `${site.name} — ${site.tagline}`, template: `%s · ${site.name}` },
   description: site.description,
+  appleWebApp: { title: site.name, statusBarStyle: "black-translucent" },
 }
 
 export const viewport: Viewport = {
@@ -21,8 +22,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${bebas.variable} ${anybody.variable} ${archivoNarrow.variable} ${newsreader.variable}`}
     >
+      <head>
+        {/* Enables scroll-reveal styles only when JS runs, so content never hides without it */}
+        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
+      </head>
       <body className="min-h-dvh">{children}</body>
     </html>
   )

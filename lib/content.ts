@@ -1,157 +1,13 @@
 /*
- * Placeholder content for the home page.
- * Essays and testimonies are SAMPLE entries written to show the layout. Replace
- * them with real, consented archive material before launch. Timeline entries
- * are real milestones but should still be fact-checked by the editorial team.
+ * Timeline milestones. These are real events but should be fact-checked by the
+ * editorial team before launch. Stories themselves live in the database.
  */
-
-export type Pattern = "mudcloth" | "kente" | "adire" | "chevron"
-
-export type Essay = {
-  slug: string
-  title: string
-  dek: string
-  author: string
-  region: string
-  era: string
-  readMinutes: number
-  category: "Queer History" | "Essay" | "Photo Essay" | "Archive Notes"
-  pattern: Pattern
-}
-
-export const featuredEssay: Essay = {
-  slug: "the-names-we-were-given",
-  title: "The names we were given, and the names we kept",
-  dek: "Before colonial penal codes, many African languages already held words for us. A long read on vocabulary, memory, and what survives translation.",
-  author: "Editorial Collective",
-  region: "Pan-African",
-  era: "Pre-1900 – Present",
-  readMinutes: 18,
-  category: "Queer History",
-  pattern: "mudcloth",
-}
-
-export const essays: Essay[] = [
-  {
-    slug: "letters-from-hillbrow",
-    title: "Letters from Hillbrow",
-    dek: "Reading a decade of correspondence between friends in 1980s Johannesburg.",
-    author: "Sample Author",
-    region: "Southern Africa",
-    era: "1980s",
-    readMinutes: 12,
-    category: "Archive Notes",
-    pattern: "kente",
-  },
-  {
-    slug: "dance-floors-as-archives",
-    title: "Dance floors as archives",
-    dek: "How nightlife in Lagos, Nairobi and Dakar kept community records no library would.",
-    author: "Sample Author",
-    region: "West & East Africa",
-    era: "1990s – 2010s",
-    readMinutes: 9,
-    category: "Photo Essay",
-    pattern: "adire",
-  },
-  {
-    slug: "after-the-ruling",
-    title: "After the ruling",
-    dek: "What changed, and what didn't, in the first five years after decriminalisation.",
-    author: "Sample Author",
-    region: "Southern Africa",
-    era: "2019 – 2024",
-    readMinutes: 14,
-    category: "Essay",
-    pattern: "chevron",
-  },
-]
-
-export type Testimony = {
-  id: string
-  title: string
-  narrator: string
-  initials: string
-  location: string
-  recorded: string
-  durationSec: number
-  language: string
-  transcribed: boolean
-  /** 0–1 amplitudes for the waveform preview */
-  wave: number[]
-}
-
-function wave(seed: number, n = 56): number[] {
-  // Deterministic pseudo-waveform so server and client render identically.
-  const out: number[] = []
-  let x = seed
-  for (let i = 0; i < n; i++) {
-    x = (x * 9301 + 49297) % 233280
-    const r = x / 233280
-    const envelope = 0.45 + 0.55 * Math.sin((i / n) * Math.PI)
-    out.push(Math.max(0.12, Math.min(1, r * envelope + 0.1)))
-  }
-  return out
-}
-
-export const testimonies: Testimony[] = [
-  {
-    id: "t-001",
-    title: "My grandmother called it a gift",
-    narrator: "Anonymous narrator",
-    initials: "AN",
-    location: "Kampala, Uganda",
-    recorded: "2024",
-    durationSec: 1724,
-    language: "Luganda",
-    transcribed: true,
-    wave: wave(7),
-  },
-  {
-    id: "t-002",
-    title: "The first march, 1990",
-    narrator: "Sample narrator",
-    initials: "SN",
-    location: "Johannesburg, South Africa",
-    recorded: "2023",
-    durationSec: 2410,
-    language: "isiZulu",
-    transcribed: true,
-    wave: wave(19),
-  },
-  {
-    id: "t-003",
-    title: "A kitchen full of aunties",
-    narrator: "Anonymous narrator",
-    initials: "AN",
-    location: "Accra, Ghana",
-    recorded: "2025",
-    durationSec: 1188,
-    language: "Twi",
-    transcribed: false,
-    wave: wave(42),
-  },
-  {
-    id: "t-004",
-    title: "Songs we sang in secret",
-    narrator: "Sample narrator",
-    initials: "SN",
-    location: "Dakar, Senegal",
-    recorded: "2024",
-    durationSec: 1532,
-    language: "Wolof",
-    transcribed: true,
-    wave: wave(88),
-  },
-]
-
-export type Region = "Southern Africa" | "East Africa" | "West Africa" | "Central Africa" | "North Africa"
 
 export type TimelineEntry = {
   year: string
   title: string
   body: string
-  region: Region
+  region: string
   place: string
 }
 
@@ -198,11 +54,4 @@ export const timeline: TimelineEntry[] = [
     region: "Central Africa",
     place: "Libreville",
   },
-]
-
-export const archiveCollections = [
-  { label: "Photographs", count: 1240 },
-  { label: "Oral histories", count: 318 },
-  { label: "Letters & zines", count: 562 },
-  { label: "Press clippings", count: 2087 },
 ]
