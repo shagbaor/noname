@@ -33,6 +33,12 @@ pnpm dev                                 # http://localhost:3000
 | `/about`, `/donate`, `/submit` | What we are about; donations; submission guidelines (submissions by email to the address in `lib/site.ts`) |
 | `/admin` | Editor: search/filter, create, edit, publish and delete posts; `/admin/subscribers` to search, export (CSV) and remove mailing-list sign-ups; change password at `/admin/account` |
 
+## Comments
+
+Readers can respond to any story without an account, with text and/or a voice note (recorded in the browser or uploaded, up to 3 MB ≈ 3 minutes). Every comment is held for approval at `/admin/comments`.
+
+Spam defences (all server-side, see `lib/anti-spam.ts` and `postComment` in `app/actions.ts`): moderation queue; HMAC-signed form token tied to the story with a minimum 3 s and maximum 6 h age; honeypot field; per-visitor rate limit (3 per 10 min, 15 per day) keyed on a hashed IP (raw IPs are never stored); length limits, at most one link, duplicate detection; audio verified by file signature (not the browser's claimed type) and served with `nosniff`. Pending voice notes are only playable by editors.
+
 ## Writing posts
 
 Bodies use light plain-text markup: blank line = new paragraph, `## Heading`, `> pull quote`, `**bold**`, `*italic*`. Interviews and transcripts: start turns with `**Q:**` / `**A:**` or `**Narrator:**`. Poems and letters keep their line breaks. Photo essays take one `image URL | caption` per line.

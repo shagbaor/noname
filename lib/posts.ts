@@ -103,6 +103,11 @@ export async function getPublishedBySlug(slug: string): Promise<Post | null> {
   return rows[0] ?? null
 }
 
+export async function getPublishedById(id: number): Promise<{ id: number } | null> {
+  const rows = await query<{ id: number }>(`SELECT id FROM posts WHERE id = $1 AND status = 'published'`, [id])
+  return rows[0] ?? null
+}
+
 export async function countByForm(): Promise<Record<string, number>> {
   const rows = await query<{ form: string; n: number }>(
     `SELECT form, count(*)::int AS n FROM posts WHERE status = 'published' GROUP BY form`,

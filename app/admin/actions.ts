@@ -11,6 +11,7 @@ import {
   verifyPassword,
 } from "@/lib/auth"
 import { isFormId, isThemeId, PATTERNS, type Pattern } from "@/lib/forms"
+import { deleteComment, deleteFromSameSource, setCommentStatus } from "@/lib/comments"
 import { deleteSubscriber } from "@/lib/subscribers"
 import { createPost, deletePost, getById, slugTaken, updatePost, type PostImage, type PostInput } from "@/lib/posts"
 
@@ -169,4 +170,19 @@ export async function removeSubscriber(data: FormData) {
   const id = Number(data.get("id"))
   if (id) await deleteSubscriber(id)
   revalidatePath("/admin/subscribers")
+}
+
+// ---- Comments ----
+
+export async function moderateComment(data: FormData) {
+  await requireAdmin()
+  const id = Number(data.get("id"))
+  const op = String(data.get("op"))
+  if (!id) return
+  if (op === "approve") await setCommentStatus(id, "approved")
+  else if (op === "unapprove") await setCommentStatus(id, "pending")
+  else if (op === "delete") await deleteComment(id)
+  else if (op === "delete-source") await deleteFromSameSource(id)
+  revalidatePath("/admin/comments")
+  revalidatePath("/stories", "layout")
 }

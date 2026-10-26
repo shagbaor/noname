@@ -8,3 +8,7 @@ export function formatDate(d: Date | string | null) {
   if (!d) return ""
   return new Date(d).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })
 }
+
+export function formatBytes(n: number) {
+  return n < 1024 * 1024 ? `${Math.max(1, Math.round(n / 1024))} KB` : `${(n / 1024 / 1024).toFixed(1)} MB`
+}

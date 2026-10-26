@@ -4,6 +4,7 @@ import { notFound, permanentRedirect } from "next/navigation"
 import { PlayButton, TrackWaveform } from "@/components/player"
 import { Reveal } from "@/components/reveal"
 import { Cover, StoryCard } from "@/components/story-card"
+import { Comments } from "@/components/comments"
 import { StoryBody } from "@/components/story-body"
 import { SubmitBand } from "@/components/submit-band"
 import { Badge, formTone } from "@/components/ui/badge"
@@ -172,6 +173,8 @@ export default async function StoryPage({ params }: Props) {
           </Reveal>
         </aside>
       </div>
+
+      <Comments postId={post.id} />
 
       <SubmitBand type={meta.label} />
 

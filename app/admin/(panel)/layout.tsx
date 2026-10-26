@@ -1,12 +1,14 @@
 import Link from "next/link"
 import { LogoMark } from "@/components/logo"
 import { requireAdmin } from "@/lib/auth"
+import { countPending } from "@/lib/comments"
 import { logout } from "../actions"
 
 export const dynamic = "force-dynamic"
 
 export default async function PanelLayout({ children }: { children: React.ReactNode }) {
   const session = await requireAdmin()
+  const pending = await countPending()
   return (
     <>
       <header className="sticky top-0 z-30 border-b border-outline-variant/60 bg-surface/90 backdrop-blur-md">
@@ -18,6 +20,14 @@ export default async function PanelLayout({ children }: { children: React.ReactN
           <nav className="flex flex-1 items-center gap-5 text-label-lg uppercase text-on-surface-variant">
             <Link href="/admin" className="hover:text-on-surface">Posts</Link>
             <Link href="/admin/posts/new" className="hover:text-on-surface">New</Link>
+            <Link href="/admin/comments" className="flex items-center gap-1.5 hover:text-on-surface">
+              Comments
+              {pending > 0 && (
+                <span className="grid min-w-5 place-items-center rounded-full bg-terracotta px-1.5 text-[11px] leading-5 text-on-primary-container tabular-nums" aria-label={`${pending} awaiting review`}>
+                  {pending}
+                </span>
+              )}
+            </Link>
             <Link href="/admin/subscribers" className="hover:text-on-surface">Subscribers</Link>
             <Link href="/admin/account" className="hidden hover:text-on-surface sm:inline">Account</Link>
           </nav>
