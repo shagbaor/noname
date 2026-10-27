@@ -49,9 +49,6 @@ export function SiteFooter() {
         <span>
           © {new Date().getFullYear()} {site.name}. Held in community.
         </span>
-        <Link href="/about#for-oliver" className="normal-case tracking-normal italic font-serif text-[13px] text-on-surface-variant hover:text-marigold">
-          Dedicated to Oliver, who always listened.
-        </Link>
         <Link href="/admin" className="hover:text-on-surface-variant">
           Editors
         </Link>
