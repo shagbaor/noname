@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { DonateBand } from "@/components/donate-band"
+import { KinDefinition } from "@/components/kin-definition"
 import { NewsCard } from "@/components/news-card"
 import { Reveal } from "@/components/reveal"
 import { SectionHeading } from "@/components/section-heading"
@@ -61,6 +62,9 @@ export default async function Home() {
               An archive and journal of queer African life, gathered with care and held in community.
               Memory as resistance. Memory as joy.
             </p>
+            <div className="animate-rise mt-6 max-w-[34rem] border-l-2 border-marigold pl-4" style={{ "--delay": "430ms" } as React.CSSProperties}>
+              <KinDefinition compact />
+            </div>
             <div className="animate-rise mt-7 flex flex-wrap gap-3" style={{ "--delay": "480ms" } as React.CSSProperties}>
               <Button href="/stories">Read the stories</Button>
               <Button href="/about" variant="secondary-violet">

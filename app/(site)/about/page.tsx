@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { PageHeader } from "@/components/page-header"
 import { Reveal } from "@/components/reveal"
+import { KinDefinition } from "@/components/kin-definition"
 import { TextileArt } from "@/components/textile"
 import { Button } from "@/components/ui/button"
 import { GROUPS, typesInGroup } from "@/lib/forms"
@@ -44,6 +45,19 @@ export default function AboutPage() {
         intro={`${site.name} is a living archive and journal of queer African life. We gather, protect and share the stories that official records left out, so the people who come after us know we were always here.`}
       />
 
+      {/* What "kin" means */}
+      <section aria-label="What kin means" className="shell pb-[clamp(2.5rem,5vw,4rem)]">
+        <Reveal className="grid gap-6 lg:grid-cols-12 lg:items-center">
+          <div className="lg:col-span-4">
+            <h2 className="text-display-sm uppercase">Why “Kin”</h2>
+            <p className="mt-2 text-body-md text-on-surface-variant">
+              We named the archive for the oldest kind of belonging, and for the newer kinds we make for ourselves.
+            </p>
+          </div>
+          <KinDefinition className="lg:col-span-8" />
+        </Reveal>
+      </section>
+
       {/* Mission */}
       <section className="shell section-y border-t border-outline-variant/60">
         <div className="grid items-center gap-[clamp(1.5rem,4vw,3rem)] lg:grid-cols-12">
@@ -82,7 +96,7 @@ export default function AboutPage() {
           </div>
           <span className="mx-auto block size-3 rotate-45 bg-marigold" aria-hidden />
           <p className="mt-6 text-label-md uppercase tracking-[0.3em] text-marigold">A dedication</p>
-          <h2 id="for-oliver-title" className="mt-2 text-display-lg uppercase">For Oliver</h2>
+          <h2 id="for-oliver-title" className="mt-2 text-display-lg uppercase">In memory of Oliver</h2>
           <div className="mt-8 space-y-5 font-serif text-[clamp(1.15rem,1.05rem+0.45vw,1.4rem)] leading-[1.75] text-on-surface italic">
             <p>
               This archive is dedicated to Oliver, who always believed that stories are meant to be told, and
@@ -93,10 +107,11 @@ export default function AboutPage() {
               they ended. To the quiet ones that took years to find their words. And every time came the same
               gentle nudge: <span className="not-italic text-primary">write it down.</span>
             </p>
-            <p>So I did. And I kept going, until there was room here for everyone else&apos;s stories too.</p>
+            <p>So I did. And I&apos;m still writing, now with room here for everyone else&apos;s stories too.</p>
             <p>
               Every essay, every poem, every voice kept in these pages carries a little of that belief. Thank you,
-              Oliver, for listening first, and for knowing before I did that our stories were worth keeping.
+              Oliver, for listening first, and for knowing before I did that our stories were worth keeping. I&apos;ll
+              keep telling them.
             </p>
           </div>
           <p className="mt-8 text-label-lg uppercase text-on-surface-variant">With love, always</p>

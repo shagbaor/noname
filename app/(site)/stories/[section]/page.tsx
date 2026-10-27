@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { notFound, permanentRedirect } from "next/navigation"
+import { OliverMemorial } from "@/components/oliver-memorial"
 import { PageHeader } from "@/components/page-header"
 import { Reveal } from "@/components/reveal"
 import { StoryGrid } from "@/components/story-grid"
@@ -65,6 +66,7 @@ export default async function SectionPage({ params, searchParams }: Props) {
       </PageHeader>
 
       <div className="shell pb-[clamp(3rem,6vw,5rem)]">
+        {(r.type?.id === "tribute" || (!r.type && r.group.id === "archive")) && <OliverMemorial />}
         {asList ? (
           posts.length ? (
             <ul className="divide-y divide-outline-variant/60 border-y border-outline-variant/60">
