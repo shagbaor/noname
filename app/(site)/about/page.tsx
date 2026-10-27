@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { PageHeader } from "@/components/page-header"
 import { Reveal } from "@/components/reveal"
-import { KinDefinition } from "@/components/kin-definition"
+import { WhyKin } from "@/components/why-kin"
 import { TextileArt } from "@/components/textile"
 import { Button } from "@/components/ui/button"
 import { GROUPS, typesInGroup } from "@/lib/forms"
@@ -45,16 +45,17 @@ export default function AboutPage() {
         intro={`${site.name} is a living archive and journal of queer African life. We gather, protect and share the stories that official records left out, so the people who come after us know we were always here.`}
       />
 
-      {/* What "kin" means */}
-      <section aria-label="What kin means" className="shell pb-[clamp(2.5rem,5vw,4rem)]">
-        <Reveal className="grid gap-6 lg:grid-cols-12 lg:items-center">
+      {/* Why the name */}
+      <section id="why-kin" aria-labelledby="why-kin-title" className="shell scroll-mt-20 pb-[clamp(2.5rem,5vw,4rem)]">
+        <Reveal className="grid gap-6 rounded-lg border border-outline-variant/60 bg-surface-container-low p-[clamp(1.5rem,4vw,3rem)] lg:grid-cols-12">
           <div className="lg:col-span-4">
-            <h2 className="text-display-sm uppercase">Why “Kin”</h2>
-            <p className="mt-2 text-body-md text-on-surface-variant">
-              We named the archive for the oldest kind of belonging, and for the newer kinds we make for ourselves.
+            <p className="flex items-center gap-2 text-label-md uppercase text-marigold">
+              <span className="size-1.5 rotate-45 bg-marigold" aria-hidden />
+              Our name
             </p>
+            <h2 id="why-kin-title" className="mt-2 text-display-lg uppercase">Why we chose Kin</h2>
           </div>
-          <KinDefinition className="lg:col-span-8" />
+          <WhyKin className="lg:col-span-8" />
         </Reveal>
       </section>
 
